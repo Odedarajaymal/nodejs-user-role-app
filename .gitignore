@@ -1,0 +1,5 @@
+# Node.js specific
+node_modules/             # Ignore the node_modules directory
+.env                      # Environment variables file
+package-lock.json         # NPM lock file
+
