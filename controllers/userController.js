@@ -1,9 +1,23 @@
 const User = require('../models/User');
 const mongoose = require('mongoose');
-
+const Joi = require('joi');
 // Create a new user
 exports.createUser = async (req, res) => {
   try {
+        // Define the Joi schema for validation
+  const schema = Joi.object({
+    firstName: Joi.string().min(2).max(50).required(),
+    lastName: Joi.string().min(2).max(50).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).required(),
+    role: Joi.string().required(),
+    active: Joi.boolean()
+  });
+
+    // Validate the request body against the schema
+    const { error } = schema.validate(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+
     const { firstName, lastName, email, password, role } = req.body;
     const user = new User({ firstName, lastName, email, password, role });
     await user.save();
